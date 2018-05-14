@@ -30,7 +30,13 @@ public class ShortUrlController {
 	@RequestMapping(value = "/web/shortLink", method = RequestMethod.POST)
 	public String shortenUrl(ModelMap model, @RequestParam String url) {
 		System.out.println("*********shortLink*********");
-		System.out.println(url);
+		System.out.println(url);	
+		boolean foundHttp = url.contains("http://");
+		boolean foundHttps = url.contains("https://");
+		if(!(foundHttp || foundHttps)) {
+			url = "http://"+url;
+		}
+		
 		if (!isUrlValid(url)) {
 			model.put("errorMessage", "invalid URL");			
 			return "welcome";
@@ -58,7 +64,7 @@ public class ShortUrlController {
 	private boolean isUrlValid(String url) {
 		boolean valid = true;
 		try {
-			new URL(url);
+				new URL(url);
 		} catch (MalformedURLException e) {
 			valid = false;
 		}
